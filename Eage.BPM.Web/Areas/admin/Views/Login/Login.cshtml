@@ -1,0 +1,142 @@
+﻿@model Eage.BPM.ViewModel.LoginModelView
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>余盆后台管理系统</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    @*<link rel="stylesheet" type="text/css" href="~/css/icon.css" />
+    <link href="~/Scripts/easyui/themes/gray/easyui.css" rel="stylesheet" />
+    <link href="~/css/common.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-1.8.3.min.js" type="text/javascript"></script>
+    <script src="~/Scripts/jQuery.Ajax.js" type="text/javascript"></script>
+    <script src="~/Scripts/easyui/jquery.easyui.min.js"></script>
+    <script src="~/Scripts/easyui/Xiucai.EasyUI.Extensions.js"></script>
+    <link href="~/Scripts/qqmsg/msgbox.css" rel="stylesheet" />
+    <script src="~/Scripts/qqmsg/jQuery.qqmsg.js"></script>*@
+    <style type="text/css">
+        .login_top {
+            overflow: hidden;
+            background: #F0F0F0 url(@Url.Content("~/images/sql2008.png")) no-repeat center 1px;
+            padding-top: 80px;
+            width:477px;
+            height:260px;
+        }
+    </style>
+    <script type="text/javascript" src="@Url.Content("showValidateCode")"></script>
+
+
+</head>
+<body style="background: url(@Url.Content("~/images/back.gif")) fixed; ">
+ <script type="text/javascript">
+
+        var themes = [{ "id": "default", "text": "默认皮肤", "selected": true }, { "id": "gray", "text": "流行灰" }]
+        var savecookdays = [{ "id": 7, "text": "保存7天", "selected": true }, { "id": 30, "text": "保存30天" }, { "id": 365, "text": "永久保存" }, { "id": -1, "text": "不保存" }]
+
+        $(function () {
+            var h = 430;
+
+            if (!showValidateCode) {
+                h = 275;
+            }
+            $.hDialog({
+                title: '用户登录',
+                boxPadding: '2px',
+                width: 495,
+                closable: false,
+                height: h,
+                iconCls: 'icon-user',
+                modal: false,
+                draggable: false,
+                href: 'LoginForm',
+                buttons: [{
+                    text: '登录',
+                    iconCls: 'icon-user',
+                    handler: login
+                }, {
+                    text: 'About Me',
+                    iconCls: 'icon-comments',
+                    handler: aboutMe
+                }], align: 'center',
+                onLoad: function () {
+
+                    if (!showValidateCode) {
+                        $('#vCodebox').hide();
+                        $('#vCodebox').next().hide();
+                        $('#txt_validatecode').val('1055818239');
+                        $('.login_top').height(120)
+                    }
+
+                    $('#CookieDay').combobox({
+                        data: savecookdays, width: 120, valueField: 'id', textField: 'text', editable: false, panelHeight: 'auto'
+                    });
+                    $('#imgValidateCode').click(function () {
+                        //此处在IE浏览器中会被缓存
+                        var url = '@Url.Action("Vcode", "Vcode")' + "?rid=" + Math.random();
+                        $("#imgValidateCode").attr("src", url)
+                    });
+                }
+            });
+
+            //响应键盘的回车事件
+            $(this).keydown(function (event) {
+                if (event.keyCode == 13) {
+                    event.returnValue = false;
+                    event.cancel = true;
+                    return login();
+                }
+            });
+
+
+        });
+        function login() {
+            var actionUrl = '@Url.Action("Login", "Login")';
+            var data = $('#loginForm').serialize();
+            $.ajaxjson(actionUrl, data, function (d) {
+                if (d.Success) {
+                    //跳转到首页
+                    window.location = '@Url.Action("Index", "Home")';
+                }
+            });
+        }
+        function aboutMe() {
+            $.hDialog({
+                title: '关于疯狂秀才',
+                width: 400,
+                height: 300,
+                showBtns: false,
+                content: ''
+            });
+        }
+        //兼容浏览器大小
+        function getsize() {
+            var windowHeight = 0;
+            var widowWidth = 0;
+            if (typeof (window.innerHeight) == 'number') {
+                windowHeight = window.innerHeight;
+                widowWidth = window.innerWidth;
+            }
+            else {
+                if (document.documentElement && document.documentElement.clientHeight) {
+                    windowHeight = document.documentElement.clientHeight;
+                    widowWidth = document.documentElement.clientWidth;
+                }
+                else {
+                    if (document.body && document.body.clientHeight) {
+                        windowHeight = document.body.clientHeight;
+                        widowWidth = document.body.clientWidth;
+                    }
+                }
+            }
+
+            return { width: widowWidth, height: windowHeight };
+        }
+    </script>
+</body>
+</html>

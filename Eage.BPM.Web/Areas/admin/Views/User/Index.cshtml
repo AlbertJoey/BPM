@@ -1,0 +1,69 @@
+﻿@{
+    Layout = null;
+}
+@using Eage.BPM.WebHelper;
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>系统用户列表</title>
+    <script type="text/javascript">
+        //获取当前dataGrid集合
+        $(function () {
+            var size = { width: $(window).width(), height: $(window).height() };
+            autoResize({ dataGrid: '#userGrid', gridType: 'datagrid', callback: myGrid.databind, height: 36, width: 230 });
+            $('#toolbar').css({
+                height: '32px'
+            });
+        });
+        var myGrid =
+        {
+            databind: function (size) {
+                $('#userGrid').datagrid({
+                    url: "/admin/user/getlist",
+                    width: size.width,
+                    height: size.height,
+                    idField: 'KeyId',
+                    singleSelect: true,
+                    striped: true,
+                    columns: [[
+                        { title: 'ID', field: 'KeyId', width: 80, sortable: true },
+                        { title: '用户名', field: 'UserName', width: 140, sortable: true },
+                        { title: '真实姓名', field: 'TrueName', width: 120, sortable: true },
+                        { title: '部门名称', field: 'depname', width: 160 },
+                        { title: '邮箱', field: 'Email', width: 200, sortable: true },
+                        { title: '描述', field: 'Remark', width: 200 }
+                    ]],
+                    pagination: true,
+                    pageSize: 50,
+                    pageList: [10, 20, 30, 50]
+                });
+            }
+        }
+        var crud = {
+            add: function () {
+                alert("very good");
+            }
+        }
+    </script>
+</head>
+<body>
+    <div id="layout">
+        <div region="west" iconcls="icon-chart_organisation" split="true" title="部门树" style="width:220px;padding: 5px" collapsible="false">
+            <ul id="deptree"></ul>
+        </div>
+        <div region="center" title="员工帐号" iconcls="icon-users" style="padding: 2px; overflow: hidden">
+            <div id="toolbar">
+                @{Html.RenderAction("GetFunctions", "PermissOpt", new { url = Request.RawUrl });}
+                <div class="datagrid-btn-separator"></div>
+                <a id="a_role" style="float:left" href="javascript:;" plain="true" class="easyui-linkbutton" icon="icon-group" title="角色">角色</a>
+                <a id="a_authorize" style="float:left" href="javascript:;" plain="true" class="easyui-linkbutton" icon="icon-group_gear" title="授权">授权</a>
+                <div class="datagrid-btn-separator"></div>
+                <a id="a_editPass" style="float:left" href="javascript:;" plain="true" class="easyui-linkbutton" icon="icon-key" title="修改密码">修改密码</a>
+            </div>
+            <table id="userGrid" toolbar="#toolbar"></table>
+
+        </div>
+    </div>
+</body>
+</html>

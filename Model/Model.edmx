@@ -1,0 +1,625 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="BPMModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <!--生成过程中发现错误:
+警告 6002: 表/视图“BPM.dbo.Log”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
+        <EntityType Name="Log">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="Date" />
+            <PropertyRef Name="Thread" />
+            <PropertyRef Name="Level" />
+            <PropertyRef Name="Logger" />
+            <PropertyRef Name="Message" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Date" Type="datetime" Nullable="false" />
+          <Property Name="Thread" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="Level" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Logger" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="Message" Type="varchar" MaxLength="4000" Nullable="false" />
+          <Property Name="Exception" Type="varchar" MaxLength="2000" />
+        </EntityType>
+        <EntityType Name="Sys_Buttons">
+          <Key>
+            <PropertyRef Name="KeyId" />
+          </Key>
+          <Property Name="KeyId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ButtonText" Type="nvarchar" MaxLength="50" />
+          <Property Name="Sortnum" Type="int" />
+          <Property Name="iconCls" Type="nvarchar" MaxLength="50" />
+          <Property Name="IconUrl" Type="nvarchar" MaxLength="50" />
+          <Property Name="ButtonTag" Type="nvarchar" MaxLength="50" />
+          <Property Name="Remark" Type="nvarchar" MaxLength="50" />
+          <Property Name="ButtonHtml" Type="nvarchar" MaxLength="2000" />
+        </EntityType>
+        <EntityType Name="Sys_Departments">
+          <Key>
+            <PropertyRef Name="KeyId" />
+          </Key>
+          <Property Name="KeyId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DepartmentName" Type="nvarchar" MaxLength="50" />
+          <Property Name="ParentId" Type="int" />
+          <Property Name="Sortnum" Type="int" />
+          <Property Name="Remark" Type="nvarchar" MaxLength="500" />
+        </EntityType>
+        <EntityType Name="Sys_LogDetails">
+          <Key>
+            <PropertyRef Name="KeyId" />
+          </Key>
+          <Property Name="KeyId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="LogId" Type="int" />
+          <Property Name="FieldName" Type="nvarchar" MaxLength="50" />
+          <Property Name="FieldText" Type="nvarchar" MaxLength="50" />
+          <Property Name="OldValue" Type="ntext" />
+          <Property Name="NewValue" Type="ntext" />
+          <Property Name="Remark" Type="nvarchar" MaxLength="500" />
+          <Property Name="AddTime" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Sys_NavButtons">
+          <Key>
+            <PropertyRef Name="KeyId" />
+          </Key>
+          <Property Name="KeyId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NavId" Type="int" />
+          <Property Name="ButtonId" Type="int" />
+          <Property Name="Sortnum" Type="int" />
+        </EntityType>
+        <EntityType Name="Sys_Navigations">
+          <Key>
+            <PropertyRef Name="KeyId" />
+          </Key>
+          <Property Name="KeyId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NavTitle" Type="nvarchar" MaxLength="50" />
+          <Property Name="Linkurl" Type="nvarchar" MaxLength="50" />
+          <Property Name="Sortnum" Type="int" />
+          <Property Name="iconCls" Type="nvarchar" MaxLength="50" />
+          <Property Name="iconUrl" Type="nvarchar" MaxLength="50" />
+          <Property Name="IsVisible" Type="bit" />
+          <Property Name="ParentID" Type="int" />
+          <Property Name="NavTag" Type="nvarchar" MaxLength="50" />
+          <Property Name="BigImageUrl" Type="nvarchar" MaxLength="500" />
+          <Property Name="IsNewWindow" Type="bit" />
+          <Property Name="WinWidth" Type="int" />
+          <Property Name="WinHeight" Type="int" />
+          <Property Name="NavArea" Type="nvarchar" MaxLength="500" />
+          <Property Name="NavController" Type="nvarchar" MaxLength="500" />
+          <Property Name="NavAction" Type="nvarchar" MaxLength="500" />
+        </EntityType>
+        <EntityType Name="Sys_RoleNavBtns">
+          <Key>
+            <PropertyRef Name="KeyId" />
+          </Key>
+          <Property Name="KeyId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RoleId" Type="int" />
+          <Property Name="NavId" Type="int" />
+          <Property Name="BtnId" Type="int" />
+        </EntityType>
+        <EntityType Name="Sys_Roles">
+          <Key>
+            <PropertyRef Name="KeyId" />
+          </Key>
+          <Property Name="KeyId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RoleName" Type="nvarchar" MaxLength="50" />
+          <Property Name="Sortnum" Type="int" />
+          <Property Name="Remark" Type="nvarchar" MaxLength="500" />
+          <Property Name="isDefault" Type="int" />
+          <Property Name="DepId" Type="int" />
+        </EntityType>
+        <EntityType Name="Sys_Roles_Departments">
+          <Key>
+            <PropertyRef Name="KeyId" />
+          </Key>
+          <Property Name="KeyId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="roleId" Type="int" />
+          <Property Name="depId" Type="int" />
+        </EntityType>
+        <EntityType Name="Sys_UserNavBtns">
+          <Key>
+            <PropertyRef Name="KeyId" />
+          </Key>
+          <Property Name="KeyId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="int" />
+          <Property Name="NavId" Type="int" />
+          <Property Name="BtnId" Type="int" />
+        </EntityType>
+        <EntityType Name="Sys_UserRoles">
+          <Key>
+            <PropertyRef Name="Keyid" />
+          </Key>
+          <Property Name="Keyid" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserID" Type="int" />
+          <Property Name="RoleID" Type="int" />
+        </EntityType>
+        <EntityType Name="Sys_Users">
+          <Key>
+            <PropertyRef Name="KeyId" />
+          </Key>
+          <Property Name="KeyId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserName" Type="nvarchar" MaxLength="50" />
+          <Property Name="Password" Type="nvarchar" MaxLength="50" />
+          <Property Name="PassSalt" Type="nvarchar" MaxLength="50" />
+          <Property Name="Email" Type="nvarchar" MaxLength="500" />
+          <Property Name="IsAdmin" Type="bit" />
+          <Property Name="IsDisabled" Type="bit" />
+          <Property Name="TrueName" Type="nvarchar" MaxLength="50" />
+          <Property Name="DepartmentId" Type="int" />
+          <Property Name="Mobile" Type="nvarchar" MaxLength="50" />
+          <Property Name="QQ" Type="nvarchar" MaxLength="50" />
+          <Property Name="Remark" Type="nvarchar" MaxLength="500" />
+          <Property Name="AddTime" Type="smalldatetime" />
+          <Property Name="MenusJson" Type="ntext" />
+          <Property Name="ConfigJson" Type="ntext" />
+        </EntityType>
+        <EntityType Name="Sys_Users_Departments">
+          <Key>
+            <PropertyRef Name="KeyId" />
+          </Key>
+          <Property Name="KeyId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserID" Type="int" />
+          <Property Name="DepID" Type="int" />
+        </EntityType>
+        <Function Name="Usp_GetNavAndNavbuttonPermissByUserID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserID" Type="int" Mode="In" />
+        </Function>
+        <EntityContainer Name="BPMModelStoreContainer">
+          <EntitySet Name="Sys_Buttons" EntityType="Self.Sys_Buttons" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Sys_Departments" EntityType="Self.Sys_Departments" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Sys_LogDetails" EntityType="Self.Sys_LogDetails" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Sys_NavButtons" EntityType="Self.Sys_NavButtons" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Sys_Navigations" EntityType="Self.Sys_Navigations" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Sys_RoleNavBtns" EntityType="Self.Sys_RoleNavBtns" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Sys_Roles" EntityType="Self.Sys_Roles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Sys_Roles_Departments" EntityType="Self.Sys_Roles_Departments" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Sys_UserNavBtns" EntityType="Self.Sys_UserNavBtns" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Sys_UserRoles" EntityType="Self.Sys_UserRoles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Sys_Users" EntityType="Self.Sys_Users" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Sys_Users_Departments" EntityType="Self.Sys_Users_Departments" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Log" EntityType="Self.Log" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+[Log].[Id] AS [Id], 
+[Log].[Date] AS [Date], 
+[Log].[Thread] AS [Thread], 
+[Log].[Level] AS [Level], 
+[Log].[Logger] AS [Logger], 
+[Log].[Message] AS [Message], 
+[Log].[Exception] AS [Exception]
+FROM [dbo].[Log] AS [Log]</DefiningQuery>
+          </EntitySet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="BPMModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Sys_Buttons">
+          <Key>
+            <PropertyRef Name="KeyId" />
+          </Key>
+          <Property Name="KeyId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ButtonText" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Sortnum" Type="Int32" />
+          <Property Name="iconCls" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="IconUrl" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ButtonTag" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Remark" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ButtonHtml" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Sys_Departments">
+          <Key>
+            <PropertyRef Name="KeyId" />
+          </Key>
+          <Property Name="KeyId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DepartmentName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ParentId" Type="Int32" />
+          <Property Name="Sortnum" Type="Int32" />
+          <Property Name="Remark" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Sys_LogDetails">
+          <Key>
+            <PropertyRef Name="KeyId" />
+          </Key>
+          <Property Name="KeyId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LogId" Type="Int32" />
+          <Property Name="FieldName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FieldText" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="OldValue" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="NewValue" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Remark" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="AddTime" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="Sys_NavButtons">
+          <Key>
+            <PropertyRef Name="KeyId" />
+          </Key>
+          <Property Name="KeyId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NavId" Type="Int32" />
+          <Property Name="ButtonId" Type="Int32" />
+          <Property Name="Sortnum" Type="Int32" />
+        </EntityType>
+        <EntityType Name="Sys_RoleNavBtns">
+          <Key>
+            <PropertyRef Name="KeyId" />
+          </Key>
+          <Property Name="KeyId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RoleId" Type="Int32" />
+          <Property Name="NavId" Type="Int32" />
+          <Property Name="BtnId" Type="Int32" />
+        </EntityType>
+        <EntityType Name="Sys_Roles">
+          <Key>
+            <PropertyRef Name="KeyId" />
+          </Key>
+          <Property Name="KeyId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RoleName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Sortnum" Type="Int32" />
+          <Property Name="Remark" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="isDefault" Type="Int32" />
+          <Property Name="DepId" Type="Int32" />
+        </EntityType>
+        <EntityType Name="Sys_Roles_Departments">
+          <Key>
+            <PropertyRef Name="KeyId" />
+          </Key>
+          <Property Name="KeyId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="roleId" Type="Int32" />
+          <Property Name="depId" Type="Int32" />
+        </EntityType>
+        <EntityType Name="Sys_UserNavBtns">
+          <Key>
+            <PropertyRef Name="KeyId" />
+          </Key>
+          <Property Name="KeyId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="Int32" />
+          <Property Name="NavId" Type="Int32" />
+          <Property Name="BtnId" Type="Int32" />
+        </EntityType>
+        <EntityType Name="Sys_UserRoles">
+          <Key>
+            <PropertyRef Name="Keyid" />
+          </Key>
+          <Property Name="Keyid" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="Int32" />
+          <Property Name="RoleID" Type="Int32" />
+        </EntityType>
+        <EntityType Name="Sys_Users">
+          <Key>
+            <PropertyRef Name="KeyId" />
+          </Key>
+          <Property Name="KeyId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PassSalt" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="IsAdmin" Type="Boolean" />
+          <Property Name="IsDisabled" Type="Boolean" />
+          <Property Name="TrueName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DepartmentId" Type="Int32" />
+          <Property Name="Mobile" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="QQ" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Remark" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="AddTime" Type="DateTime" Precision="0" />
+          <Property Name="MenusJson" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ConfigJson" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Sys_Users_Departments">
+          <Key>
+            <PropertyRef Name="KeyId" />
+          </Key>
+          <Property Name="KeyId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="Int32" />
+          <Property Name="DepID" Type="Int32" />
+        </EntityType>
+        <EntityType Name="Log">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="Date" />
+            <PropertyRef Name="Thread" />
+            <PropertyRef Name="Level" />
+            <PropertyRef Name="Logger" />
+            <PropertyRef Name="Message" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Thread" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Level" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Logger" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Message" Type="String" MaxLength="4000" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Exception" Type="String" MaxLength="2000" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityContainer Name="BPMEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Sys_Buttons" EntityType="Self.Sys_Buttons" />
+          <EntitySet Name="Sys_Departments" EntityType="Self.Sys_Departments" />
+          <EntitySet Name="Sys_LogDetails" EntityType="Self.Sys_LogDetails" />
+          <EntitySet Name="Sys_NavButtons" EntityType="Self.Sys_NavButtons" />
+          <EntitySet Name="Sys_RoleNavBtns" EntityType="Self.Sys_RoleNavBtns" />
+          <EntitySet Name="Sys_Roles" EntityType="Self.Sys_Roles" />
+          <EntitySet Name="Sys_Roles_Departments" EntityType="Self.Sys_Roles_Departments" />
+          <EntitySet Name="Sys_UserNavBtns" EntityType="Self.Sys_UserNavBtns" />
+          <EntitySet Name="Sys_UserRoles" EntityType="Self.Sys_UserRoles" />
+          <EntitySet Name="Sys_Users" EntityType="Self.Sys_Users" />
+          <EntitySet Name="Sys_Users_Departments" EntityType="Self.Sys_Users_Departments" />
+          <EntitySet Name="Log" EntityType="Self.Log" />
+          <EntitySet Name="Sys_Navigations" EntityType="BPMModel.Sys_Navigations" />
+          <FunctionImport Name="Usp_GetNavAndNavbuttonPermissByUserID" ReturnType="Collection(BPMModel.Usp_GetNavAndNavbuttonPermissByUserID_Result)">
+            <Parameter Name="UserID" Mode="In" Type="Int32" />
+          </FunctionImport>
+        </EntityContainer>
+        <EntityType Name="Sys_Navigations">
+          <Key>
+            <PropertyRef Name="KeyId" />
+          </Key>
+          <Property Name="KeyId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NavTitle" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Linkurl" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Sortnum" Type="Int32" />
+          <Property Name="iconCls" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="iconUrl" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="IsVisible" Type="Boolean" />
+          <Property Name="ParentID" Type="Int32" />
+          <Property Name="NavTag" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="BigImageUrl" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="IsNewWindow" Type="Boolean" />
+          <Property Name="WinWidth" Type="Int32" />
+          <Property Name="WinHeight" Type="Int32" />
+          <Property Name="NavArea" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="NavController" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="NavAction" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <ComplexType Name="Usp_GetNavAndNavbuttonPermissByUserID_Result">
+          <Property Type="Int32" Name="NavId" Nullable="true" />
+          <Property Type="Int32" Name="BtnId" Nullable="true" />
+          <Property Type="Int32" Name="priNavID" Nullable="true" />
+          <Property Type="String" Name="NavTitle" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Linkurl" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="navSortnum" Nullable="true" />
+          <Property Type="String" Name="navIconCls" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="navIconUrl" Nullable="true" MaxLength="50" />
+          <Property Type="Boolean" Name="IsVisible" Nullable="true" />
+          <Property Type="Int32" Name="ParentID" Nullable="true" />
+          <Property Type="String" Name="NavTag" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="BigImageUrl" Nullable="true" MaxLength="500" />
+          <Property Type="Boolean" Name="IsNewWindow" Nullable="true" />
+          <Property Type="Int32" Name="WinWidth" Nullable="true" />
+          <Property Type="Int32" Name="WinHeight" Nullable="true" />
+          <Property Type="String" Name="NavArea" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="NavController" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="NavAction" Nullable="true" MaxLength="500" />
+          <Property Type="Int32" Name="PriBtnId" Nullable="true" />
+          <Property Type="String" Name="ButtonText" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="btnSortnum" Nullable="true" />
+          <Property Type="String" Name="btnIconCls" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="btnIconUrl" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="ButtonTag" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Remark" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="ButtonHtml" Nullable="true" MaxLength="2000" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="BPMModelStoreContainer" CdmEntityContainer="BPMEntities">
+          <EntitySetMapping Name="Sys_Buttons">
+            <EntityTypeMapping TypeName="BPMModel.Sys_Buttons">
+              <MappingFragment StoreEntitySet="Sys_Buttons">
+                <ScalarProperty Name="KeyId" ColumnName="KeyId" />
+                <ScalarProperty Name="ButtonText" ColumnName="ButtonText" />
+                <ScalarProperty Name="Sortnum" ColumnName="Sortnum" />
+                <ScalarProperty Name="iconCls" ColumnName="iconCls" />
+                <ScalarProperty Name="IconUrl" ColumnName="IconUrl" />
+                <ScalarProperty Name="ButtonTag" ColumnName="ButtonTag" />
+                <ScalarProperty Name="Remark" ColumnName="Remark" />
+                <ScalarProperty Name="ButtonHtml" ColumnName="ButtonHtml" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Sys_Departments">
+            <EntityTypeMapping TypeName="BPMModel.Sys_Departments">
+              <MappingFragment StoreEntitySet="Sys_Departments">
+                <ScalarProperty Name="KeyId" ColumnName="KeyId" />
+                <ScalarProperty Name="DepartmentName" ColumnName="DepartmentName" />
+                <ScalarProperty Name="ParentId" ColumnName="ParentId" />
+                <ScalarProperty Name="Sortnum" ColumnName="Sortnum" />
+                <ScalarProperty Name="Remark" ColumnName="Remark" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Sys_LogDetails">
+            <EntityTypeMapping TypeName="BPMModel.Sys_LogDetails">
+              <MappingFragment StoreEntitySet="Sys_LogDetails">
+                <ScalarProperty Name="KeyId" ColumnName="KeyId" />
+                <ScalarProperty Name="LogId" ColumnName="LogId" />
+                <ScalarProperty Name="FieldName" ColumnName="FieldName" />
+                <ScalarProperty Name="FieldText" ColumnName="FieldText" />
+                <ScalarProperty Name="OldValue" ColumnName="OldValue" />
+                <ScalarProperty Name="NewValue" ColumnName="NewValue" />
+                <ScalarProperty Name="Remark" ColumnName="Remark" />
+                <ScalarProperty Name="AddTime" ColumnName="AddTime" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Sys_NavButtons">
+            <EntityTypeMapping TypeName="BPMModel.Sys_NavButtons">
+              <MappingFragment StoreEntitySet="Sys_NavButtons">
+                <ScalarProperty Name="KeyId" ColumnName="KeyId" />
+                <ScalarProperty Name="NavId" ColumnName="NavId" />
+                <ScalarProperty Name="ButtonId" ColumnName="ButtonId" />
+                <ScalarProperty Name="Sortnum" ColumnName="Sortnum" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Sys_RoleNavBtns">
+            <EntityTypeMapping TypeName="BPMModel.Sys_RoleNavBtns">
+              <MappingFragment StoreEntitySet="Sys_RoleNavBtns">
+                <ScalarProperty Name="KeyId" ColumnName="KeyId" />
+                <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+                <ScalarProperty Name="NavId" ColumnName="NavId" />
+                <ScalarProperty Name="BtnId" ColumnName="BtnId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Sys_Roles">
+            <EntityTypeMapping TypeName="BPMModel.Sys_Roles">
+              <MappingFragment StoreEntitySet="Sys_Roles">
+                <ScalarProperty Name="KeyId" ColumnName="KeyId" />
+                <ScalarProperty Name="RoleName" ColumnName="RoleName" />
+                <ScalarProperty Name="Sortnum" ColumnName="Sortnum" />
+                <ScalarProperty Name="Remark" ColumnName="Remark" />
+                <ScalarProperty Name="isDefault" ColumnName="isDefault" />
+                <ScalarProperty Name="DepId" ColumnName="DepId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Sys_Roles_Departments">
+            <EntityTypeMapping TypeName="BPMModel.Sys_Roles_Departments">
+              <MappingFragment StoreEntitySet="Sys_Roles_Departments">
+                <ScalarProperty Name="KeyId" ColumnName="KeyId" />
+                <ScalarProperty Name="roleId" ColumnName="roleId" />
+                <ScalarProperty Name="depId" ColumnName="depId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Sys_UserNavBtns">
+            <EntityTypeMapping TypeName="BPMModel.Sys_UserNavBtns">
+              <MappingFragment StoreEntitySet="Sys_UserNavBtns">
+                <ScalarProperty Name="KeyId" ColumnName="KeyId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="NavId" ColumnName="NavId" />
+                <ScalarProperty Name="BtnId" ColumnName="BtnId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Sys_UserRoles">
+            <EntityTypeMapping TypeName="BPMModel.Sys_UserRoles">
+              <MappingFragment StoreEntitySet="Sys_UserRoles">
+                <ScalarProperty Name="Keyid" ColumnName="Keyid" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Sys_Users">
+            <EntityTypeMapping TypeName="BPMModel.Sys_Users">
+              <MappingFragment StoreEntitySet="Sys_Users">
+                <ScalarProperty Name="KeyId" ColumnName="KeyId" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="PassSalt" ColumnName="PassSalt" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="IsAdmin" ColumnName="IsAdmin" />
+                <ScalarProperty Name="IsDisabled" ColumnName="IsDisabled" />
+                <ScalarProperty Name="TrueName" ColumnName="TrueName" />
+                <ScalarProperty Name="DepartmentId" ColumnName="DepartmentId" />
+                <ScalarProperty Name="Mobile" ColumnName="Mobile" />
+                <ScalarProperty Name="QQ" ColumnName="QQ" />
+                <ScalarProperty Name="Remark" ColumnName="Remark" />
+                <ScalarProperty Name="AddTime" ColumnName="AddTime" />
+                <ScalarProperty Name="MenusJson" ColumnName="MenusJson" />
+                <ScalarProperty Name="ConfigJson" ColumnName="ConfigJson" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Sys_Users_Departments">
+            <EntityTypeMapping TypeName="BPMModel.Sys_Users_Departments">
+              <MappingFragment StoreEntitySet="Sys_Users_Departments">
+                <ScalarProperty Name="KeyId" ColumnName="KeyId" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="DepID" ColumnName="DepID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Log">
+            <EntityTypeMapping TypeName="BPMModel.Log">
+              <MappingFragment StoreEntitySet="Log">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Thread" ColumnName="Thread" />
+                <ScalarProperty Name="Level" ColumnName="Level" />
+                <ScalarProperty Name="Logger" ColumnName="Logger" />
+                <ScalarProperty Name="Message" ColumnName="Message" />
+                <ScalarProperty Name="Exception" ColumnName="Exception" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Sys_Navigations">
+            <EntityTypeMapping TypeName="BPMModel.Sys_Navigations">
+              <MappingFragment StoreEntitySet="Sys_Navigations">
+                <ScalarProperty Name="NavAction" ColumnName="NavAction" />
+                <ScalarProperty Name="NavController" ColumnName="NavController" />
+                <ScalarProperty Name="NavArea" ColumnName="NavArea" />
+                <ScalarProperty Name="WinHeight" ColumnName="WinHeight" />
+                <ScalarProperty Name="WinWidth" ColumnName="WinWidth" />
+                <ScalarProperty Name="IsNewWindow" ColumnName="IsNewWindow" />
+                <ScalarProperty Name="BigImageUrl" ColumnName="BigImageUrl" />
+                <ScalarProperty Name="NavTag" ColumnName="NavTag" />
+                <ScalarProperty Name="ParentID" ColumnName="ParentID" />
+                <ScalarProperty Name="IsVisible" ColumnName="IsVisible" />
+                <ScalarProperty Name="iconUrl" ColumnName="iconUrl" />
+                <ScalarProperty Name="iconCls" ColumnName="iconCls" />
+                <ScalarProperty Name="Sortnum" ColumnName="Sortnum" />
+                <ScalarProperty Name="Linkurl" ColumnName="Linkurl" />
+                <ScalarProperty Name="NavTitle" ColumnName="NavTitle" />
+                <ScalarProperty Name="KeyId" ColumnName="KeyId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="Usp_GetNavAndNavbuttonPermissByUserID" FunctionName="BPMModel.Store.Usp_GetNavAndNavbuttonPermissByUserID">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BPMModel.Usp_GetNavAndNavbuttonPermissByUserID_Result">
+                <ScalarProperty Name="NavId" ColumnName="NavId" />
+                <ScalarProperty Name="BtnId" ColumnName="BtnId" />
+                <ScalarProperty Name="priNavID" ColumnName="priNavID" />
+                <ScalarProperty Name="NavTitle" ColumnName="NavTitle" />
+                <ScalarProperty Name="Linkurl" ColumnName="Linkurl" />
+                <ScalarProperty Name="navSortnum" ColumnName="navSortnum" />
+                <ScalarProperty Name="navIconCls" ColumnName="navIconCls" />
+                <ScalarProperty Name="navIconUrl" ColumnName="navIconUrl" />
+                <ScalarProperty Name="IsVisible" ColumnName="IsVisible" />
+                <ScalarProperty Name="ParentID" ColumnName="ParentID" />
+                <ScalarProperty Name="NavTag" ColumnName="NavTag" />
+                <ScalarProperty Name="BigImageUrl" ColumnName="BigImageUrl" />
+                <ScalarProperty Name="IsNewWindow" ColumnName="IsNewWindow" />
+                <ScalarProperty Name="WinWidth" ColumnName="WinWidth" />
+                <ScalarProperty Name="WinHeight" ColumnName="WinHeight" />
+                <ScalarProperty Name="NavArea" ColumnName="NavArea" />
+                <ScalarProperty Name="NavController" ColumnName="NavController" />
+                <ScalarProperty Name="NavAction" ColumnName="NavAction" />
+                <ScalarProperty Name="PriBtnId" ColumnName="PriBtnId" />
+                <ScalarProperty Name="ButtonText" ColumnName="ButtonText" />
+                <ScalarProperty Name="btnSortnum" ColumnName="btnSortnum" />
+                <ScalarProperty Name="btnIconCls" ColumnName="btnIconCls" />
+                <ScalarProperty Name="btnIconUrl" ColumnName="btnIconUrl" />
+                <ScalarProperty Name="ButtonTag" ColumnName="ButtonTag" />
+                <ScalarProperty Name="Remark" ColumnName="Remark" />
+                <ScalarProperty Name="ButtonHtml" ColumnName="ButtonHtml" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="true" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="无" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

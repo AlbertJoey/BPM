@@ -1,0 +1,11 @@
+﻿<form id="loginForm">
+    <div class="login_top">
+        <table style="width:100%;height:100%">
+            <tr><td style="padding-left:10px;">用 户 名：</td><td><input autocomplete="off" value="admin" type="text" class="txt03 easyui-validatebox" data-options="required:true,missingMessage:'请输入用户名'" name="UserName" style="font-weight:bold" id="UserName" /></td></tr>
+            <tr><td style="padding-left:10px;">密　　码：</td><td><input type="password" name="Password" class="txt03 easyui-validatebox" data-options="required:true,missingMessage:'请输入密码'" id="Password" style="font-weight:bold" /></td></tr>
+            <tr><td style="padding-left:10px;">保存密码：</td><td><input name="CookieDay" type="text" id="CookieDay" /></td></tr>
+            <tr id="vCodebox"><td style="padding-left:10px;">验 证 码：</td><td><input autocomplete="off" type="text" class="txt03 easyui-validatebox" data-options="required:true,missingMessage:'请输入验证码'" style="font-weight:bold" maxlength="6" id="Vcode" name="Vcode" /></td></tr>
+            <tr><td style="padding-left:10px;">&nbsp;</td><td><img alt="验证码" title="看不清点击切换验证码" id="imgValidateCode" src="@Url.Action("Vcode", "Vcode")" height="40" width="100" style="cursor:pointer;" /></td></tr>
+        </table>
+    </div>
+</form>

@@ -1,0 +1,17 @@
+﻿@{
+    Layout = null;
+}
+@model Eage.BPM.ViewModel.Sys_UsersView
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<body>
+    <div>
+        @Model.UserName+@Model.PassSalt+@Model.Password
+    </div>
+</body>
+</html>

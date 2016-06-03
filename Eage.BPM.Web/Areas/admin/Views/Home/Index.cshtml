@@ -1,0 +1,436 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <!--导入灰色皮肤和公共样式css-->
+    @*<link href="~/Scripts/easyui/themes/gray/easyui.css" rel="stylesheet" />
+    <link href="~/css/common.css" rel="stylesheet" />
+    <link href="~/css/icon.css" rel="stylesheet" />
+    <link href="~/Scripts/qqmsg/msgbox.css" rel="stylesheet" /*@>
+    <title>华澳翼时代APP后台管理系统</title>
+    <style type="text/css">
+        .title1 {
+            font-size: 18px;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .title2 {
+            font-size: 12px;
+            color: #fff;
+        } 
+    </style>
+</head>
+<body onselectstart="return false;" class="easyui-layout" style="overflow-y: hidden; " fit="true" scroll="no">
+    <!--页面加载loading-->
+    <div id="loading" style="position: fixed;top: -50%;left: -50%;width: 200%;height: 200%;background: #fff;z-index: 100;overflow: hidden;">
+        <img src='@Url.Content("~/images/ajax-loader.gif")' style="position: absolute;top: 0;left: 0;right: 0;bottom: 0;margin: auto;" />
+    </div>
+    <!--noScript-->
+    <noscript>
+        <div style=" position:absolute; z-index:100000; height:2046px;top:0px;left:0px; width:100%; background:white; text-align:center;">
+            <img src='@Url.Content("~/images/noscript.gif")' alt='抱歉，请开启脚本支持！' />
+        </div>
+    </noscript>
+    <!--easyui主框架北部-->
+    <div region="north" split="true" border="false" id="header">
+        @*<span style="float: right; padding-right: 20px;" class="head">
+            欢迎<label runat="server" id="cuname"></label>&nbsp;&nbsp; <a href="#" id="editpass">修改密码</a>&nbsp;&nbsp;<a href="#" id="loginOut">安全退出</a>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+        </span>
+        <span style="background: url('@Url.Content("~/images/icon_03.png")') no-repeat left;float: left; width:65px;margin-top:6px;height:55px; ></span>
+        <div class="left" style="width:40%; line-height:23px; margin:15px 0 0 6%;">
+            <font class="title1">余盆财富管理系统</font><br />
+            <font class="title2">professional integrity innovation, make more possible</font>
+        </div>*@
+    </div>
+    <!--easyui主框架西部手风琴-->
+    <div region="west" split="true" title="导航菜单" style="width: 180px;" id="west">
+        <div id="wnav">
+        </div>
+    </div>
+    <!--easyui主框架南部footer-->
+    <div region="south" split="false" style="height: 30px; border-top:none; ">
+        <div class="footer">All Rights Reserved by 华澳翼时代信息技术责任有限公司 </div>
+    </div>
+    <!--easyui主框架中部面板-->
+    <div id="mainPanle" region="center" style="background: #eee; overflow-y:hidden" border="false">
+        <div id="tabs" class="easyui-tabs" fit="true">
+
+        </div>
+    </div>
+    <!--右键点击tab时提示-->
+    <div id="closeMenu" class="easyui-menu" style="width:150px;">
+        <div id="refresh" iconcls="icon-arrow_refresh">刷新</div>
+        <div class="menu-sep"></div>
+        <div id="close">关闭</div>
+        <div id="closeall">全部关闭</div>
+        <div id="closeother">除此之外全部关闭</div>
+        <div class="menu-sep"></div>
+        <div id="closeright">关闭右侧标签</div>
+        <div id="closeleft">关闭左侧标签</div>
+        <div class="menu-sep"></div>
+        <div id="exit">退出</div>
+    </div>
+    @*<!--jquery.min.js和easyui.js、jquery.ajax.js-->
+    <script src="~/Scripts/jquery-1.8.3.min.js" type="text/javascript"></script>
+    <script src="~/Scripts/qqmsg/jQuery.qqmsg.js"></script>
+    <script src="~/Scripts/easyui/jquery.easyui.min.js"></script>
+    <script src="~/Scripts/easyui/locale/easyui-lang-zh_CN.js"></script>
+    <script src="~/Scripts/easyui/easyui-validate-rules.js"></script>
+    <script src="~/Scripts/easyui/Xiucai.EasyUI.Extensions.js"></script>
+    <script src="~/Scripts/jQuery.Ajax.js"></script>
+    <!--validate.min.js-->
+    <script src="~/scripts/validate/jquery.validate.min.js" type="text/javascript"></script>
+    <script src="~/scripts/validate/jQuery.Validate.message_cn.js" type="text/javascript"></script>
+    <!--xheditor.js-->
+    <script src="~/Editor/xhEditor/xheditor-1.2.1.min.js" type="text/javascript"></script>
+    <script src="~/Editor/xhEditor/xheditor_lang/zh-cn.js" type="text/javascript"></script>
+    <!--konckout.js-->
+    <script src="~/scripts/knockout/knockout-2.1.0.js" type="text/javascript"></script>
+    <script src="~/scripts/knockout/knockout.mapping-latest.js" type="text/javascript"></script>*@
+    <!--获取当前登录人员所拥有的菜单权限-->
+    <script type="text/javascript" src="@Url.Content("/admin/Home/GetMenuData")"></script>
+    <!--设置当前newlayout布局的js-->
+    <script type="text/javascript">
+    var onlyOpenTitle = "Welcome";
+    var opentabs = 5; //允许打开的TAB数量
+    $(function () {
+        if (menus) {
+            //初始化NAV
+            initNav();
+            //双击关闭tab初始化
+            tabClose();
+            //默认打开的tab
+            addTab(onlyOpenTitle, '@Url.Content("/admin/home/welcome")', 'icon-house_star'); //添加默认TAB
+        } else {
+            $.messager.alert("系统提示", "<font color=red><b>您没有任何权限！请联系管理员。</b></font>", "warning", function () {
+                LoginOut();
+            });
+        }
+        $('#editpass').click(function () {
+            editMyPass();
+        });
+
+        $('body').layout({
+            onExpand: function () {
+                $('body').layout('resize');
+            }
+        });
+        //Tab右键菜单
+        $('#closeMenu').menu({
+            onClick: function (item) {
+                closeTab(item.id);
+            }
+        });
+    });
+    //初始化左侧菜单
+    function initNav() {
+        Accordion.Init(menus, 0);
+        //tab上的tools右侧的标签
+        $('#tabs').tabs({
+            tools: [{
+                title: '首页',
+                iconCls: 'icon-house_star',
+                handler: function () {
+                    addTab(onlyOpenTitle, 'welcome.html', 'icon-house_star');
+                    return false;
+                }
+            }, {
+                iconCls: 'icon-arrow_refresh',
+                handler: function () {
+                    var tab = $('#tabs').tabs('getSelected');
+                    if (tab.panel('options').title != onlyOpenTitle)
+                        closeTab('refresh');
+                    return false;
+                }
+            }, {
+                iconCls: 'panel-tool-close',
+                handler: function () {
+                    if (confirm('确认要关闭所有窗口吗？')) {
+                        closeTab("closeall");
+                    }
+                }
+            }],
+            onContextMenu: function (e, title) {
+                if (title != onlyOpenTitle) {
+                    e.preventDefault();
+                    $('#closeMenu').menu('show', {
+                        left: e.pageX,
+                        top: e.pageY
+                    });
+                    $('#tabs').tabs('select', title);
+                } else {
+                    return false;
+                }
+            }
+        });
+    }
+    //手风琴效果导航
+    var Accordion = {
+        addNav: function (data, iconType) {
+            $.each(data, function (i, sm) {
+                var menulist = "";
+                if (iconType == 0) {
+                    //小图标
+                    menulist += '<ul class="smallicon menuItem" id="menu' + sm.id + '">';
+                    $.each(sm.children, function (j, o) {
+                        menulist += '<li  data-options=\'' + JSON.stringify(o.attributes) + '\'><div><a ref="' + o.id + '" href="#" rel="'
+                            + o.attributes.url + '/' + o.id + '" ><span iconCls="' + o.iconCls + '" class="icon ' + o.iconCls
+                            + '" >&nbsp;</span><span class="nav">' + o.text
+                            + '</span></a></div></li> ';
+                    });
+                } else {
+                    menulist += '<ul class="bigicon menuItem" id="menu' + sm.id + '">';
+                    $.each(sm.children, function (j, o) {
+                        menulist += '<li data-options=\'' + JSON.stringify(o.attributes) + '\' ><div><a ref="' + o.id + '" href="#" rel="'
+                            + o.attributes.url + '/' + o.id + '" ><span class="img" iconCls="' + o.iconCls + '">'
+                            + '<img src="' + '../..' + o.attributes.BigImageUrl + '"/></span><span class="nav">' + o.text
+                            + '</span></a></div></li> ';
+
+                    });
+                }
+                menulist += '</ul>';
+
+                $('#wnav').accordion('add', {
+                    title: sm.text,
+                    content: menulist,
+                    iconCls: sm.iconCls,
+                    border: false,
+                    selected: (i == 0)
+                });
+
+                $('#menu' + sm.id).data("menus", sm);
+            });
+        },
+        Init: function (menuData, iconType) {
+            $("#wnav").accordion({
+                fit: true,
+                border: false,
+                onSelect: function (t, i) {
+                    //alert(t);
+                }
+            });
+            Accordion.addNav(menuData, iconType);
+
+            $('.menuItem li').live({
+                click: function () {
+                    var a = $(this).children('div').children('a');
+                    var tabTitle = $(a).children('.nav').text();
+                    //时间戳防止缓存
+                    var url = $(a).attr("rel") + '?Time=' + new Date().getTime();
+                    var menuid = $(a).attr("ref");
+                    var icon = $(a).children('span').attr('iconCls');
+                    //此段代表弹出dialog不是添加tab
+                    //var mattr = $(this).data('options');
+                    //if (mattr.IsNewWindow) {
+                    //    $.hDialog({
+                    //        title: tabTitle,
+                    //        href: url,
+                    //        width: mattr.WinWidth,
+                    //        height: mattr.WinHeight
+                    //    });
+                    //} else { }
+                    addTab(tabTitle, url, icon);
+
+                    $('.accordion li div').removeClass("selected");
+                    $(this).children('div').addClass("selected");
+                    return false;
+                }
+            });
+        }
+    };
+    //添加tab页面
+    function addTab(subtitle, url, icon) {
+        if (url == "" || url == "#")
+            return false;
+        var tabCount = $('#tabs').tabs('tabs').length;
+        var hasTab = $('#tabs').tabs('exists', subtitle);
+        var add = function () {
+            if (!hasTab) {
+                $('#tabs').tabs('add', {
+                    title: subtitle,
+                    content: createFrame(url),
+                    closable: (subtitle != onlyOpenTitle),
+                    icon: icon
+                });
+            } else {
+                $('#tabs').tabs('select', subtitle);
+                //closeTab('refresh'); //选择TAB时刷新页面
+            }
+        };
+        if (tabCount > opentabs && !hasTab) {
+            var msg = '<b>您当前打开了太多的页面，如果继续打开，会造成程序运行缓慢，无法流畅操作！</b>';
+            $.messager.confirm("系统提示", msg, function (b) {
+                if (b) add();
+                else return false;
+            });
+        } else {
+            add();
+        }
+    }
+    //创建iframe
+    function createFrame(url) {
+        var getClassName = url.split('?')[0].split('/');
+        var lastIndex = getClassName.length - 1;
+        var s = '<iframe scrolling="auto" frameborder="0"  style="width:100%;height:95%;" src='+url+' name=' + getClassName[lastIndex] + ' id=' + getClassName[lastIndex] + ' ></iframe>';
+        return s;
+    }
+    //双击关闭tab
+    function tabClose() {
+        /*双击关闭TAB选项卡*/
+        $(".tabs-inner").live('dblclick', function () {
+            var subtitle = $(this).children(".tabs-closable").text();
+            if (subtitle != onlyOpenTitle && subtitle != "")
+                $('#tabs').tabs('close', subtitle);
+        });
+    }
+    //关闭tab
+    function closeTab(action) {
+        var alltabs = $('#tabs').tabs('tabs');
+        var currentTab = $('#tabs').tabs('getSelected');
+        var allTabtitle = [];
+        $.each(alltabs, function (i, n) {
+            allTabtitle.push($(n).panel('options').title);
+        });
+        switch (action) {
+            case "refresh":
+                var iframe = $(currentTab.panel('options').content);
+                var src = iframe.attr('src');
+                $('#tabs').tabs('update', {
+                    tab: currentTab,
+                    options: {
+                        content: createFrame(src)
+                    }
+                });
+                break;
+            case "close":
+                var currtab_title = currentTab.panel('options').title;
+                $('#tabs').tabs('close', currtab_title);
+                break;
+            case "closeall":
+                $.each(allTabtitle, function (i, n) {
+                    if (n != onlyOpenTitle) {
+                        $('#tabs').tabs('close', n);
+                    }
+                });
+                break;
+            case "closeother":
+                var currtab_title = currentTab.panel('options').title;
+                $.each(allTabtitle, function (i, n) {
+                    if (n != currtab_title && n != onlyOpenTitle) {
+                        $('#tabs').tabs('close', n);
+                    }
+                });
+                break;
+            case "closeright":
+                var tabIndex = $('#tabs').tabs('getTabIndex', currentTab);
+
+                if (tabIndex == alltabs.length - 1) {
+                    alert('右面TAB菜单栏已全部关闭 !!');
+                    return false;
+                }
+                $.each(allTabtitle, function (i, n) {
+                    if (i > tabIndex) {
+                        if (n != onlyOpenTitle) {
+                            $('#tabs').tabs('close', n);
+                        }
+                    }
+                });
+
+                break;
+            case "closeleft":
+                var tabIndex = $('#tabs').tabs('getTabIndex', currentTab);
+                if (tabIndex == 1) {
+                    alert('左面TAB菜单栏已全部关闭。 !!');
+                    return false;
+                }
+                $.each(allTabtitle, function (i, n) {
+                    if (i < tabIndex) {
+                        if (n != onlyOpenTitle) {
+                            $('#tabs').tabs('close', n);
+                        }
+                    }
+                });
+
+                break;
+            case "exit":
+                $('#closeMenu').menu('hide');
+                break;
+        }
+    }
+    //html修改密码
+    var str_editpass = '<form id="xiuCai_Form"><table class="grid">';
+    str_editpass += '<tr><td>用户姓名：</td><td><span id="loginname"></span></td></tr>';
+    str_editpass += '<tr><td>旧密码：</td><td><input required="true" id="txtOldPassword" name="password" type="password" class="txt03 easyui-validatebox" /></td></tr>';
+    str_editpass += '<tr><td>新密码：</td><td><input validType="safepass"  required="true" id="txtNewPassword" name="password" type="password" class="txt03 easyui-validatebox" /></td></tr>';
+    str_editpass += '<tr><td>确认密码：</td><td><input data-options="required:true" validType="equals[\'#txtNewPassword\']" id="txtReNewPassword" type="password" class="txt03 easyui-validatebox" /></td></tr>';
+    str_editpass += '</table></form>';
+    var editMyPass = function () {
+        top.$.hDialog({
+            width: 330,
+            height: 240,
+            title: '修改密码',
+            iconCls: 'icon-key',
+            content: str_editpass,
+            submit: function () {
+                if ($('#xiuCai_Form').form('validate')) {
+                    $.ajaxjson('/Sys_xt/sys_ashx/UsersHandler.ashx', "action=EditPass&old=" + $('#txtOldPassword').val() + "&new=" + $('#txtNewPassword').val(), function (d) {
+                        if (parseInt(d.Data) > 0) {
+                            alert('密码修改成功！请重新登录！');
+                            location.href = 'common_ashx/LoginHandler.ashx?type=LoginOut';
+                            location.href = "/index.aspx";
+                            return;
+                        } else {
+                            MessageOrRedirect(d);
+                        }
+                    });
+                }
+            }
+        });
+        $('#loginname').text($('#cuname').text());
+    };
+    //页面的加载时
+    $(function () {
+        $('#loginOut').click(function () {
+            $.messager.confirm('系统提示', '您确定要退出本次登录吗?', function (r) {
+                if (r) {
+                    LoginOut();
+                }
+            });
+        });
+
+        $(window).load(function () {
+            $('#loading').fadeOut();
+        });
+
+    });
+    //退出和没有权限自动跳出
+    function LoginOut() {
+        $.ajax({
+            type: "POST",
+            url: "common_ashx/LoginHandler.ashx?d=" + (+new Date()),
+            cache: false,
+            dataType: "json",
+            data: { type: "LoginOut" },
+            beforeSend: $.hLoading.show({ msg: '正在注销...' }),
+            error: function () { $.hLoading.hide(); alert('Session超时，请重新登录操作！！！'); return; },
+            success: function (data) {
+                $.hLoading.hide();
+                if (data.isSucess == 0) {
+                    location.href = "/login.aspx";
+                }
+                else {
+                    alert(data.msg);
+                    return;
+                }
+            }
+        });
+    }
+    </script>
+</body>
+</html>
